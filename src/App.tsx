@@ -5,7 +5,11 @@
 
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, User, Lock, Mail, Eye, EyeOff, Wifi, Signal, Battery } from 'lucide-react';
+import { 
+  ChevronRight, User, Lock, Mail, Eye, EyeOff, Wifi, Signal, Battery, 
+  MapPin, ChevronDown, Bell, Search, SlidersHorizontal, Star, Heart,
+  Milk, Beef, Croissant, LogOut
+} from 'lucide-react';
 
 const STEPS = [
   {
@@ -26,9 +30,260 @@ const STEPS = [
   }
 ];
 
+const CATEGORIES = [
+  { name: 'Dairy', icon: <Milk size={20} className="text-blue-500" /> },
+  { name: 'Meat', icon: <Beef size={20} className="text-red-500" /> },
+  { name: 'Bread', icon: <Croissant size={20} className="text-orange-500" /> },
+  { name: 'Fruits', icon: <div className="text-xl">🍎</div> },
+];
+
+const POPULAR_RESTAURANTS = [
+  {
+    name: "Starbucks Purwokerto",
+    address: "Jl. Overste Isdiman No.11, Jatiwinangun, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53114",
+    rating: 4.6,
+    distance: "4 KM",
+    image: "https://picsum.photos/seed/starbucks/400/300"
+  },
+  {
+    name: "Holland Bakery",
+    address: "Jl. Overste Isdiman No.11, Jatiwinangun, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53114",
+    rating: 4.6,
+    distance: "4 KM",
+    image: "https://picsum.photos/seed/holland/400/300"
+  },
+  {
+    name: "Sushi Hiro",
+    address: "Jl. Overste Isdiman No.11, Jatiwinangun, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53114",
+    rating: 4.6,
+    distance: "4 KM",
+    image: "https://picsum.photos/seed/sushihi/400/300"
+  },
+  {
+    name: "Rita Super Mall",
+    address: "Jl. Overste Isdiman No.11, Jatiwinangun, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53114",
+    rating: 4.6,
+    distance: "4 KM",
+    image: "https://picsum.photos/seed/mall/400/300"
+  }
+];
+
+const TOP_PICKS = [
+  {
+    name: "Sushi",
+    brand: "Sushi Hiro",
+    price: 3.5,
+    rating: 4.5,
+    tag: "Pick up today",
+    image: "https://picsum.photos/seed/sushi/300/300"
+  },
+  {
+    name: "Vegatables",
+    brand: "Rita Super Mall",
+    price: 1.5,
+    rating: 4.5,
+    tag: "Pick up tomorrow",
+    image: "https://picsum.photos/seed/veg/300/300"
+  },
+  {
+    name: "Hazelnut",
+    brand: "Starbucks Pur",
+    price: 1.2,
+    rating: 4.5,
+    tag: "Pick up today",
+    image: "https://picsum.photos/seed/coffee/300/300"
+  }
+];
+
 const Blob = ({ className }: { className?: string }) => (
   <div className={`absolute -z-10 w-[300px] h-[300px] bg-brand-yellow/20 rounded-full blur-[60px] ${className}`} />
 );
+
+function HomePage({ onLogout }: { onLogout: () => void }) {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen bg-white max-w-md mx-auto relative pb-20 overflow-x-hidden"
+    >
+      {/* Header */}
+      <div className="px-6 pt-12 flex justify-between items-start">
+        <div className="space-y-0.5">
+          <div className="flex items-center gap-1 text-xs text-gray-500 font-medium">
+            Current location <ChevronDown size={14} />
+          </div>
+          <h2 className="text-brand-yellow font-black text-xl">Purwokerto Selatan</h2>
+        </div>
+        <div className="relative">
+          <div className="p-2 bg-white shadow-sm border border-gray-100 rounded-full text-brand-yellow">
+            <Bell size={24} />
+          </div>
+          <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
+        </div>
+      </div>
+
+      {/* Search Bar */}
+      <div className="px-6 mt-6">
+        <div className="flex gap-3">
+          <div className="flex-1 relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <input 
+              type="text"
+              placeholder="Search here..."
+              className="w-full py-3.5 pl-12 pr-4 bg-gray-50 rounded-[15px] focus:outline-none focus:ring-1 focus:ring-brand-yellow/30 text-sm"
+            />
+          </div>
+          <button className="p-3.5 bg-gray-50 rounded-[15px] text-gray-500">
+            <SlidersHorizontal size={20} />
+          </button>
+        </div>
+      </div>
+
+      {/* Promo Banner */}
+      <div className="px-6 mt-6">
+        <div className="bg-brand-yellow rounded-[25px] p-6 relative overflow-hidden flex shadow-lg shadow-brand-yellow/20">
+          <div className="flex-1 space-y-3 z-10 relative">
+            <h3 className="text-white font-black text-xl leading-tight">
+              Exclusive Black<br />Friday Sale
+            </h3>
+            <p className="text-brand-navy font-bold text-lg">Buy 1 Get 1</p>
+            <button className="bg-brand-navy text-white text-xs font-bold py-2.5 px-6 rounded-full">
+              Get The Deal
+            </button>
+          </div>
+          <div className="absolute right-0 top-0 h-full w-1/2 z-0">
+             <img 
+              src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80" 
+              alt="Croissant"
+              className="w-full h-full object-cover rounded-l-full scale-110 translate-x-4"
+             />
+          </div>
+        </div>
+      </div>
+
+      {/* Categories */}
+      <div className="mt-8">
+        <h3 className="px-6 font-black text-brand-navy text-lg mb-4">Categories</h3>
+        <div className="flex gap-4 overflow-x-auto px-6 no-scrollbar pb-2">
+          {CATEGORIES.map((cat, i) => (
+            <div key={i} className="flex flex-col items-center gap-2 flex-shrink-0">
+              <div className="w-16 h-14 bg-gray-100 rounded-2xl flex items-center justify-center shadow-sm">
+                {cat.icon}
+              </div>
+              <span className="text-xs font-black text-brand-navy">{cat.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Around You */}
+      <div className="mt-8">
+        <h3 className="px-6 font-black text-brand-navy text-lg mb-4">Around You</h3>
+        <div className="px-6">
+          <div className="bg-white rounded-[22px] p-2.5 shadow-sm border border-gray-50 flex gap-4">
+            <img 
+              src={POPULAR_RESTAURANTS[0].image} 
+              alt={POPULAR_RESTAURANTS[0].name}
+              className="w-24 h-24 rounded-2xl object-cover"
+            />
+            <div className="flex-1 py-1 space-y-1">
+              <h4 className="font-black text-brand-navy leading-tight">{POPULAR_RESTAURANTS[0].name}</h4>
+              <p className="text-[10px] text-gray-400 leading-tight line-clamp-2 pr-2">
+                {POPULAR_RESTAURANTS[0].address}
+              </p>
+              <div className="flex gap-2 pt-1">
+                <div className="flex items-center gap-1 bg-brand-yellow px-1.5 py-0.5 rounded-md">
+                   <Star size={10} fill="currentColor" className="text-brand-navy" />
+                   <span className="text-[10px] font-black">{POPULAR_RESTAURANTS[0].rating}</span>
+                </div>
+                <div className="flex items-center gap-1 bg-brand-yellow px-1.5 py-0.5 rounded-md">
+                   <MapPin size={10} fill="currentColor" className="text-brand-navy" />
+                   <span className="text-[10px] font-black">{POPULAR_RESTAURANTS[0].distance}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Top Picks */}
+      <div className="mt-8">
+        <h3 className="px-6 font-black text-brand-navy text-lg mb-4">Top Picks</h3>
+        <div className="flex gap-5 overflow-x-auto px-6 no-scrollbar pb-4">
+          {TOP_PICKS.map((pick, i) => (
+            <div key={i} className="flex-shrink-0 w-36 bg-white rounded-[22px] p-2 shadow-md border border-gray-50 relative">
+              <button className="absolute top-4 right-4 z-10 text-gray-300 hover:text-red-500">
+                <Heart size={18} />
+              </button>
+              <img 
+                src={pick.image} 
+                alt={pick.name}
+                className="w-full aspect-square rounded-2xl object-cover mb-2"
+              />
+              <div className="px-1 space-y-0.5">
+                <h4 className="font-black text-brand-navy text-sm">{pick.name}</h4>
+                <p className="text-[8px] text-gray-400 font-bold">{pick.brand}</p>
+                <div className="flex justify-between items-center pt-1">
+                  <span className="text-brand-yellow font-black text-sm">${pick.price}</span>
+                  <div className="flex items-center gap-0.5 bg-brand-navy text-white px-1 py-0.5 rounded text-[8px] font-bold">
+                    <Star size={8} fill="currentColor" className="text-brand-yellow" />
+                    {pick.rating}
+                  </div>
+                </div>
+                <div className="mt-2 text-[8px] font-black bg-brand-navy text-white py-1 rounded-md text-center">
+                  {pick.tag}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Popular Restaurants */}
+      <div className="mt-8">
+        <h3 className="px-6 font-black text-brand-navy text-lg mb-4">Popular Restaurants</h3>
+        <div className="px-6 space-y-4">
+          {POPULAR_RESTAURANTS.map((res, i) => (
+            <div key={i} className="bg-white rounded-[22px] p-2.5 shadow-sm border border-gray-50 flex gap-4">
+              <img 
+                src={res.image} 
+                alt={res.name}
+                className="w-24 h-24 rounded-2xl object-cover"
+              />
+              <div className="flex-1 py-1 space-y-1">
+                <h4 className="font-black text-brand-navy leading-tight">{res.name}</h4>
+                <p className="text-[10px] text-gray-400 leading-tight line-clamp-2 pr-2">
+                  {res.address}
+                </p>
+                <div className="flex gap-2 pt-1">
+                  <div className="flex items-center gap-1 bg-brand-yellow px-1.5 py-0.5 rounded-md">
+                    <Star size={10} fill="currentColor" className="text-brand-navy" />
+                    <span className="text-[10px] font-black">{res.rating}</span>
+                  </div>
+                  <div className="flex items-center gap-1 bg-brand-yellow px-1.5 py-0.5 rounded-md">
+                    <MapPin size={10} fill="currentColor" className="text-brand-navy" />
+                    <span className="text-[10px] font-black">{res.distance}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Footer / Navigation (Floating) */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[380px] bg-brand-navy rounded-full py-4 px-8 flex justify-between items-center shadow-2xl z-50">
+        <MapPin className="text-brand-yellow" size={24} />
+        <div className="w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center -translate-y-6 shadow-xl shadow-brand-yellow/30">
+          <ChevronRight size={28} className="text-brand-navy" />
+        </div>
+        <button onClick={onLogout}>
+          <LogOut className="text-white/40" size={24} />
+        </button>
+      </div>
+    </motion.div>
+  );
+}
 
 function VerificationPage({ email, onVerify }: { email: string, onVerify: () => void }) {
   const [code, setCode] = useState(['', '', '', '']);
@@ -448,7 +703,7 @@ function SignUpPage({ onSignIn, onSignUpComplete }: { onSignIn: () => void, onSi
           <div className="w-48 h-48 mb-6 relative">
              <div className="absolute inset-0 bg-brand-yellow/10 blur-3xl rounded-full translate-y-4"></div>
              <img 
-              src="/asset/rafiki-signin.png" 
+              src="/asset/rafiki-signup.png" 
               alt="Sign Up Illustration"
               className="w-full h-full object-contain relative z-10"
               referrerPolicy="no-referrer"
@@ -527,7 +782,7 @@ function SignUpPage({ onSignIn, onSignUpComplete }: { onSignIn: () => void, onSi
 }
 
 export default function App() {
-  const [view, setView] = useState<'onboarding' | 'login' | 'signup' | 'verification' | 'home'>('onboarding');
+  const [view, setView] = useState<'onboarding' | 'login' | 'signup' | 'verification' | 'success' | 'home'>('onboarding');
   const [userEmail, setUserEmail] = useState('');
 
   const handleAuthStep = (email: string) => {
@@ -548,23 +803,20 @@ export default function App() {
   }
 
   if (view === 'verification') {
-    return <VerificationPage email={userEmail} onVerify={() => setView('home')} />;
+    return <VerificationPage email={userEmail} onVerify={() => setView('success')} />;
   }
 
-  if (view === 'home') {
+  if (view === 'success') {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-brand-cream p-8 text-center max-w-md mx-auto relative overflow-hidden">
         <Blob className="-top-20 -left-20" />
         <Blob className="bottom-40 -right-20" />
         
-        <div className="w-48 h-48 mb-6 flex items-center justify-center relative">
-           <div className="absolute inset-0 bg-green-500/10 blur-3xl rounded-full"></div>
-           <img 
-            src="https://cdn.pixabay.com/animation/2022/12/15/21/04/21-04-14-633_512.gif" 
-            alt="Success"
-            className="w-32 h-32 object-contain relative z-10"
-            referrerPolicy="no-referrer"
-           />
+        <div className="w-32 h-32 mb-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 relative">
+           <div className="absolute inset-0 bg-green-500 blur-2xl opacity-20"></div>
+           <svg className="w-16 h-16 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" />
+           </svg>
         </div>
 
         <h1 className="text-3xl font-black text-brand-navy mb-4">Verification Success!</h1>
@@ -573,7 +825,7 @@ export default function App() {
         </p>
         
         <button 
-          onClick={() => setView('login')}
+          onClick={() => setView('home')}
           className="w-full py-4 bg-brand-yellow rounded-[20px] text-brand-navy font-bold text-lg shadow-sm transform transition-all active:scale-95 hover:shadow-brand-yellow/30 hover:shadow-xl"
         >
           Go to Homepage
@@ -584,6 +836,10 @@ export default function App() {
         </div>
       </div>
     );
+  }
+
+  if (view === 'home') {
+    return <HomePage onLogout={() => setView('login')} />;
   }
 
   return null;
