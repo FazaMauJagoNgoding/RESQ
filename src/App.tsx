@@ -31,10 +31,13 @@ const STEPS = [
 ];
 
 const CATEGORIES = [
-  { name: 'Dairy', icon: <Milk size={20} className="text-blue-500" /> },
-  { name: 'Meat', icon: <Beef size={20} className="text-red-500" /> },
-  { name: 'Bread', icon: <Croissant size={20} className="text-orange-500" /> },
-  { name: 'Fruits', icon: <div className="text-xl">🍎</div> },
+  { name: 'Dairy', image: '/asset/Dairy.png' },
+  { name: 'Meat', image: '/asset/Meat.png' },
+  { name: 'Bread', image: '/asset/Bread.png' },
+  { name: 'Vegetables', image: '/asset/vegatables.png' },
+  { name: 'Fruits', image: '/asset/vegatables.png' },
+  { name: 'Snacks', image: '/asset/Dairy.png' },
+  { name: 'Drinks', image: '/asset/lonceng.png' },
 ];
 
 const POPULAR_RESTAURANTS = [
@@ -95,191 +98,246 @@ const TOP_PICKS = [
   }
 ];
 
-const Blob = ({ className }: { className?: string }) => (
+const BackgroundBlob = ({ className }: { className?: string }) => (
   <div className={`absolute -z-10 w-[300px] h-[300px] bg-brand-yellow/20 rounded-full blur-[60px] ${className}`} />
 );
 
 function HomePage({ onLogout }: { onLogout: () => void }) {
+  const [activeCategory, setActiveCategory] = useState<string>('Dairy');
+  
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
     <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="min-h-screen bg-white max-w-md mx-auto relative pb-20 overflow-x-hidden"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="min-h-screen bg-[#FDFDFD] max-w-md mx-auto relative pb-28 overflow-x-hidden"
     >
       {/* Header */}
-      <div className="px-6 pt-12 flex justify-between items-start">
-        <div className="space-y-0.5">
-          <div className="flex items-center gap-1 text-xs text-gray-500 font-medium">
-            Current location <ChevronDown size={14} />
+      <motion.div variants={itemVariants} className="px-6 pt-12 flex justify-between items-start">
+        <div className="">
+          <div className="flex items-center gap-1 text-sm text-gray-400 font-bold mb-0.5">
+            Current location <ChevronDown size={14} className="text-gray-400" />
           </div>
-          <h2 className="text-brand-yellow font-black text-xl">Purwokerto Selatan</h2>
+          <h2 className="text-brand-yellow font-black text-2xl tracking-tight leading-tight">Purwokerto Selatan</h2>
         </div>
-        <div className="relative">
-          <div className="p-2 bg-white shadow-sm border border-gray-100 rounded-full text-brand-yellow">
-            <Bell size={24} />
-          </div>
-          <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
+        <div className="pt-1">
+          <img src="/asset/lonceng.png" alt="Notifications" className="w-8 h-8 object-contain" />
         </div>
-      </div>
+      </motion.div>
 
       {/* Search Bar */}
-      <div className="px-6 mt-6">
-        <div className="flex gap-3">
-          <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-            <input 
-              type="text"
-              placeholder="Search here..."
-              className="w-full py-3.5 pl-12 pr-4 bg-gray-50 rounded-[15px] focus:outline-none focus:ring-1 focus:ring-brand-yellow/30 text-sm"
-            />
+      <motion.div variants={itemVariants} className="px-6 mt-8">
+        <div className="relative group">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2">
+            <img src="/asset/search.png" alt="Search" className="w-5 h-5 object-contain" />
           </div>
-          <button className="p-3.5 bg-gray-50 rounded-[15px] text-gray-500">
-            <SlidersHorizontal size={20} />
+          <input 
+            type="text"
+            placeholder="Search here..."
+            className="w-full py-3.5 pl-12 pr-12 bg-white border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] rounded-[20px] focus:outline-none text-sm placeholder:text-gray-300"
+          />
+          <button className="absolute right-4 top-1/2 -translate-y-1/2">
+            <img src="/asset/filter.png" alt="Filter" className="w-5 h-5 object-contain" />
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Promo Banner */}
-      <div className="px-6 mt-6">
-        <div className="bg-brand-yellow rounded-[25px] p-6 relative overflow-hidden flex shadow-lg shadow-brand-yellow/20">
-          <div className="flex-1 space-y-3 z-10 relative">
-            <h3 className="text-white font-black text-xl leading-tight">
+      <motion.div variants={itemVariants} className="px-6 mt-8">
+        <div className="bg-brand-yellow rounded-[40px] px-10 py-6 relative overflow-hidden flex min-h-[180px] w-full max-w-[390.28px] mx-auto shadow-xl shadow-brand-yellow/10">
+          <div className="absolute right-0 top-0 h-full w-[65%] z-0 pointer-events-none opacity-40">
+             <img 
+              src="/asset/half-elipse-special-offers.png" 
+              alt="Decoration"
+              className="w-full h-full object-cover"
+             />
+          </div>
+          <div className="absolute -right-4 -top-2 h-[120%] w-[60%] z-10 pointer-events-none">
+             <img 
+              src="/asset/croissant-special-offers.png" 
+              alt="Croissant"
+               className="w-full h-full object-contain drop-shadow-2xl translate-x-4"
+             />
+          </div>
+
+          <div className="flex-1 space-y-3 z-20 relative flex flex-col justify-center">
+            <h3 className="text-white font-black text-3xl leading-[1.1] drop-shadow-sm">
               Exclusive Black<br />Friday Sale
             </h3>
-            <p className="text-brand-navy font-bold text-lg">Buy 1 Get 1</p>
-            <button className="bg-brand-navy text-white text-xs font-bold py-2.5 px-6 rounded-full">
+            <p className="text-brand-navy font-black text-2xl tracking-tight">Buy 1 Get 1</p>
+            <button className="bg-brand-navy text-brand-yellow font-black py-4 px-10 rounded-[25px] active:scale-95 transition-transform text-base shadow-lg shadow-brand-navy/20 w-fit mt-1">
               Get The Deal
             </button>
           </div>
-          <div className="absolute right-0 top-0 h-full w-1/2 z-0">
-             <img 
-              src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80" 
-              alt="Croissant"
-              className="w-full h-full object-cover rounded-l-full scale-110 translate-x-4"
-             />
-          </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Categories */}
-      <div className="mt-8">
-        <h3 className="px-6 font-black text-brand-navy text-lg mb-4">Categories</h3>
-        <div className="flex gap-4 overflow-x-auto px-6 no-scrollbar pb-2">
-          {CATEGORIES.map((cat, i) => (
-            <div key={i} className="flex flex-col items-center gap-2 flex-shrink-0">
-              <div className="w-16 h-14 bg-gray-100 rounded-2xl flex items-center justify-center shadow-sm">
-                {cat.icon}
-              </div>
-              <span className="text-xs font-black text-brand-navy">{cat.name}</span>
-            </div>
-          ))}
+      <motion.div variants={itemVariants} className="mt-10">
+        <div className="px-6 mb-6">
+          <h3 className="font-black text-brand-navy text-2xl tracking-tight">Categories</h3>
         </div>
-      </div>
+        <div className="flex gap-4 overflow-x-auto px-6 no-scrollbar pb-2">
+          {CATEGORIES.map((cat, i) => {
+            const isActive = activeCategory === cat.name;
+            return (
+              <motion.button 
+                key={i} 
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveCategory(cat.name)}
+                className={`flex items-center gap-3 p-1.5 pr-8 rounded-full flex-shrink-0 transition-all duration-300 ${
+                  isActive ? 'bg-brand-yellow' : 'bg-gray-200'
+                }`}
+              >
+                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center overflow-hidden p-2.5">
+                  <img src={cat.image} alt={cat.name} className="w-full h-full object-contain" />
+                </div>
+                <span className={`text-xl font-bold tracking-tight text-brand-navy`}>
+                  {cat.name}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
+      </motion.div>
 
       {/* Around You */}
-      <div className="mt-8">
-        <h3 className="px-6 font-black text-brand-navy text-lg mb-4">Around You</h3>
-        <div className="px-6">
-          <div className="bg-white rounded-[22px] p-2.5 shadow-sm border border-gray-50 flex gap-4">
+      <motion.div variants={itemVariants} className="mt-10 px-6">
+        <h3 className="font-black text-brand-navy text-2xl tracking-tight mb-6">Around You</h3>
+        <div className="bg-white rounded-[35px] p-3 shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-50 flex gap-4">
+          <div className="w-36 h-28 overflow-hidden rounded-[25px] flex-shrink-0">
             <img 
-              src={POPULAR_RESTAURANTS[0].image} 
-              alt={POPULAR_RESTAURANTS[0].name}
-              className="w-24 h-24 rounded-2xl object-cover"
+              src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80" 
+              alt="Starbucks"
+              className="w-full h-full object-cover"
             />
-            <div className="flex-1 py-1 space-y-1">
-              <h4 className="font-black text-brand-navy leading-tight">{POPULAR_RESTAURANTS[0].name}</h4>
-              <p className="text-[10px] text-gray-400 leading-tight line-clamp-2 pr-2">
-                {POPULAR_RESTAURANTS[0].address}
+          </div>
+          <div className="flex-1 py-1 flex flex-col justify-between">
+            <div>
+              <h4 className="font-black text-brand-navy text-xl leading-tight mb-1">Starbucks Purwokerto</h4>
+              <p className="text-[9px] text-brand-navy/60 font-medium leading-tight line-clamp-3">
+                Jl. Overste Isdiman No.11, Jatiwinangun, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53114
               </p>
-              <div className="flex gap-2 pt-1">
-                <div className="flex items-center gap-1 bg-brand-yellow px-1.5 py-0.5 rounded-md">
-                   <Star size={10} fill="currentColor" className="text-brand-navy" />
-                   <span className="text-[10px] font-black">{POPULAR_RESTAURANTS[0].rating}</span>
-                </div>
-                <div className="flex items-center gap-1 bg-brand-yellow px-1.5 py-0.5 rounded-md">
-                   <MapPin size={10} fill="currentColor" className="text-brand-navy" />
-                   <span className="text-[10px] font-black">{POPULAR_RESTAURANTS[0].distance}</span>
-                </div>
+            </div>
+            <div className="flex gap-2">
+              <div className="flex items-center gap-1 bg-brand-yellow px-2.5 py-1 rounded-md shadow-sm">
+                <Star size={10} fill="currentColor" className="text-brand-navy" />
+                <span className="text-[10px] font-black text-brand-navy">4,6</span>
+              </div>
+              <div className="flex items-center gap-1 bg-brand-yellow px-2.5 py-1 rounded-md shadow-sm">
+                <MapPin size={10} className="text-brand-navy" />
+                <span className="text-[10px] font-black text-brand-navy">4 KM</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Top Picks */}
-      <div className="mt-8">
-        <h3 className="px-6 font-black text-brand-navy text-lg mb-4">Top Picks</h3>
-        <div className="flex gap-5 overflow-x-auto px-6 no-scrollbar pb-4">
-          {TOP_PICKS.map((pick, i) => (
-            <div key={i} className="flex-shrink-0 w-36 bg-white rounded-[22px] p-2 shadow-md border border-gray-50 relative">
-              <button className="absolute top-4 right-4 z-10 text-gray-300 hover:text-red-500">
-                <Heart size={18} />
-              </button>
-              <img 
-                src={pick.image} 
-                alt={pick.name}
-                className="w-full aspect-square rounded-2xl object-cover mb-2"
-              />
+      <motion.div variants={itemVariants} className="mt-12">
+        <div className="px-6 mb-6">
+          <h3 className="font-black text-brand-navy text-2xl tracking-tight">Top Picks</h3>
+        </div>
+        <div className="flex gap-6 overflow-x-auto px-6 no-scrollbar pb-6">
+          {[
+            { name: 'Sushi', brand: 'Sushi Hiro', price: '3.5', rating: '4.5', tag: 'Pick up today', img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80' },
+            { name: 'Vegetables', brand: 'Rita Super Mall', price: '1.5', rating: '4.5', tag: 'Pick up tomorrow', img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=400&q=80' },
+            { name: 'Hazeln...', brand: 'Starbucks Pur...', price: '1.2', rating: '4.5', tag: 'Pick up today', img: 'https://images.unsplash.com/photo-1544145945-f904253d0c7b?auto=format&fit=crop&w=400&q=80' }
+          ].map((pick, i) => (
+            <motion.div 
+              key={i} 
+              whileTap={{ scale: 0.98 }}
+              className="flex-shrink-0 w-44 bg-white rounded-[35px] p-3 shadow-[0_10px_35px_rgba(0,0,0,0.04)] border border-gray-50 relative"
+            >
+              <div className="rounded-[25px] overflow-hidden aspect-square mb-3 relative">
+                <img src={pick.img} alt={pick.name} className="w-full h-full object-cover" />
+                <button className="absolute top-2 right-2 p-1.5 bg-white/40 backdrop-blur-md rounded-full shadow-sm">
+                  <Heart size={14} className="text-white" />
+                </button>
+              </div>
               <div className="px-1 space-y-0.5">
-                <h4 className="font-black text-brand-navy text-sm">{pick.name}</h4>
-                <p className="text-[8px] text-gray-400 font-bold">{pick.brand}</p>
-                <div className="flex justify-between items-center pt-1">
-                  <span className="text-brand-yellow font-black text-sm">${pick.price}</span>
-                  <div className="flex items-center gap-0.5 bg-brand-navy text-white px-1 py-0.5 rounded text-[8px] font-bold">
+                <h4 className="font-black text-brand-navy text-base leading-tight">{pick.name}</h4>
+                <p className="text-[10px] text-gray-300 font-bold mb-1">{pick.brand}</p>
+                <span className="text-brand-yellow font-black text-xl leading-none">${pick.price}</span>
+                <div className="flex gap-1.5 pt-2">
+                  <div className="flex items-center gap-0.5 bg-brand-navy text-white px-2 py-1 rounded-md text-[9px] font-black">
                     <Star size={8} fill="currentColor" className="text-brand-yellow" />
                     {pick.rating}
                   </div>
-                </div>
-                <div className="mt-2 text-[8px] font-black bg-brand-navy text-white py-1 rounded-md text-center">
-                  {pick.tag}
+                  <div className="bg-brand-navy text-white px-2 py-1 rounded-md text-[9px] font-black">
+                    {pick.tag}
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Popular Restaurants */}
-      <div className="mt-8">
-        <h3 className="px-6 font-black text-brand-navy text-lg mb-4">Popular Restaurants</h3>
-        <div className="px-6 space-y-4">
-          {POPULAR_RESTAURANTS.map((res, i) => (
-            <div key={i} className="bg-white rounded-[22px] p-2.5 shadow-sm border border-gray-50 flex gap-4">
-              <img 
-                src={res.image} 
-                alt={res.name}
-                className="w-24 h-24 rounded-2xl object-cover"
-              />
-              <div className="flex-1 py-1 space-y-1">
-                <h4 className="font-black text-brand-navy leading-tight">{res.name}</h4>
-                <p className="text-[10px] text-gray-400 leading-tight line-clamp-2 pr-2">
-                  {res.address}
-                </p>
-                <div className="flex gap-2 pt-1">
-                  <div className="flex items-center gap-1 bg-brand-yellow px-1.5 py-0.5 rounded-md">
+      <motion.div variants={itemVariants} className="mt-8 px-6 pb-12">
+        <h3 className="font-black text-brand-navy text-2xl tracking-tight mb-6">Popular Restaurants</h3>
+        <div className="space-y-6">
+          {[
+            { name: 'Starbucks Purwokerto', img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80' },
+            { name: 'Holland Bakery', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80' },
+            { name: 'Sushi Hiro', img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80' },
+            { name: 'Rita Super Mall', img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80' }
+          ].map((res, i) => (
+            <div key={i} className="bg-white rounded-[35px] p-3 shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-50 flex gap-4">
+              <div className="w-32 h-24 overflow-hidden rounded-[25px] flex-shrink-0">
+                <img src={res.img} alt={res.name} className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1 py-1 flex flex-col justify-between">
+                <div>
+                  <h4 className="font-black text-brand-navy text-xl leading-tight mb-1">{res.name}</h4>
+                  <p className="text-[9px] text-brand-navy/60 font-medium leading-tight line-clamp-2">
+                    Jl. Overste Isdiman No.11, Jatiwinangun, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53114
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex items-center gap-1 bg-brand-yellow px-2.5 py-1 rounded-md shadow-sm">
                     <Star size={10} fill="currentColor" className="text-brand-navy" />
-                    <span className="text-[10px] font-black">{res.rating}</span>
+                    <span className="text-[10px] font-black text-brand-navy">4,6</span>
                   </div>
-                  <div className="flex items-center gap-1 bg-brand-yellow px-1.5 py-0.5 rounded-md">
-                    <MapPin size={10} fill="currentColor" className="text-brand-navy" />
-                    <span className="text-[10px] font-black">{res.distance}</span>
+                  <div className="flex items-center gap-1 bg-brand-yellow px-2.5 py-1 rounded-md shadow-sm">
+                    <MapPin size={10} className="text-brand-navy" />
+                    <span className="text-[10px] font-black text-brand-navy">4 KM</span>
                   </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
       
-      {/* Footer / Navigation (Floating) */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[380px] bg-brand-navy rounded-full py-4 px-8 flex justify-between items-center shadow-2xl z-50">
-        <MapPin className="text-brand-yellow" size={24} />
-        <div className="w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center -translate-y-6 shadow-xl shadow-brand-yellow/30">
-          <ChevronRight size={28} className="text-brand-navy" />
-        </div>
-        <button onClick={onLogout}>
-          <LogOut className="text-white/40" size={24} />
-        </button>
+      {/* Footer / Navigation */}
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-gray-100 px-12 py-8 flex justify-between items-center z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)]">
+        <motion.button whileTap={{ scale: 0.9 }}>
+          <img src="/asset/home-navbar.png" alt="Home" className="w-9 h-9 object-contain" />
+        </motion.button>
+        <motion.button whileTap={{ scale: 0.9 }} className="opacity-30">
+          <img src="/asset/history-navbar.png" alt="History" className="w-9 h-9 object-contain" />
+        </motion.button>
+        <motion.button whileTap={{ scale: 0.9 }} className="opacity-30">
+          <img src="/asset/love-navbar.png" alt="Favorites" className="w-9 h-9 object-contain" />
+        </motion.button>
+        <motion.button whileTap={{ scale: 0.9 }} onClick={onLogout} className="opacity-30">
+          <img src="/asset/user-navbar.png" alt="Profile" className="w-9 h-9 object-contain" />
+        </motion.button>
       </div>
     </motion.div>
   );
@@ -365,8 +423,8 @@ function VerificationPage({ email, onVerify }: { email: string, onVerify: () => 
       animate={{ opacity: 1 }}
       className="flex flex-col min-h-screen bg-brand-cream max-w-md mx-auto relative overflow-hidden"
     >
-      <Blob className="-top-20 -left-20" />
-      <Blob className="bottom-40 -right-20" />
+      <BackgroundBlob className="-top-20 -left-20" />
+      <BackgroundBlob className="bottom-40 -right-20" />
 
       {/* Status Bar Mockup */}
       <div className="flex justify-between items-center px-8 pt-4 pb-2">
@@ -570,8 +628,8 @@ function LoginPage({ onSignUp, onLogin }: { onSignUp: () => void, onLogin: (emai
       animate={{ opacity: 1 }}
       className="flex flex-col min-h-screen bg-brand-cream max-w-md mx-auto relative overflow-hidden"
     >
-      <Blob className="-top-20 -left-20" />
-      <Blob className="bottom-40 -right-20" />
+      <BackgroundBlob className="-top-20 -left-20" />
+      <BackgroundBlob className="bottom-40 -right-20" />
 
       <div className="px-6 pt-12 pb-4 h-20"></div>
 
@@ -693,8 +751,8 @@ function SignUpPage({ onSignIn, onSignUpComplete }: { onSignIn: () => void, onSi
       animate={{ opacity: 1 }}
       className="flex flex-col min-h-screen bg-brand-cream max-w-md mx-auto relative overflow-hidden"
     >
-      <Blob className="-top-20 -left-20" />
-      <Blob className="bottom-40 -right-20" />
+      <BackgroundBlob className="-top-20 -left-20" />
+      <BackgroundBlob className="bottom-40 -right-20" />
 
       <div className="px-6 pt-12 pb-4 h-20"></div>
 
@@ -809,30 +867,55 @@ export default function App() {
   if (view === 'success') {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-brand-cream p-8 text-center max-w-md mx-auto relative overflow-hidden">
-        <Blob className="-top-20 -left-20" />
-        <Blob className="bottom-40 -right-20" />
+        <BackgroundBlob className="-top-20 -left-20" />
+        <BackgroundBlob className="bottom-40 -right-20" />
         
-        <div className="w-32 h-32 mb-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 relative">
-           <div className="absolute inset-0 bg-green-500 blur-2xl opacity-20"></div>
-           <svg className="w-16 h-16 text-white relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" />
-           </svg>
-        </div>
+        <motion.div 
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          className="w-36 h-36 mb-10 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-[40px] flex items-center justify-center relative group"
+        >
+           <div className="absolute inset-0 bg-green-500/10 blur-3xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+           <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 relative z-10">
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <motion.path 
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="4" 
+                  d="M5 13l4 4L19 7" 
+                />
+              </svg>
+           </div>
+        </motion.div>
 
-        <h1 className="text-3xl font-black text-brand-navy mb-4">Verification Success!</h1>
-        <p className="text-brand-navy/60 mb-10 leading-relaxed px-4">
-          Welcome <span className="font-bold text-brand-navy">{userEmail}</span>. Your account is now fully verified and ready to use.
-        </p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h1 className="text-3xl font-black text-brand-navy mb-4">Verification Success!</h1>
+          <p className="text-brand-navy/60 mb-10 leading-relaxed px-4 text-base">
+            Welcome back <span className="font-bold text-brand-navy underline decoration-brand-yellow/30">{userEmail}</span>. Your account is verified and ready to help save the planet.
+          </p>
+        </motion.div>
         
-        <button 
+        <motion.button 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => setView('home')}
-          className="w-full py-4 bg-brand-yellow rounded-[20px] text-brand-navy font-bold text-lg shadow-sm transform transition-all active:scale-95 hover:shadow-brand-yellow/30 hover:shadow-xl"
+          className="w-full py-5 bg-brand-yellow rounded-[25px] text-brand-navy font-black text-lg shadow-xl shadow-brand-yellow/20 transition-all hover:shadow-brand-yellow/40 active:translate-y-1"
         >
           Go to Homepage
-        </button>
+        </motion.button>
 
         <div className="mt-auto pt-10 flex justify-center pb-2">
-          <div className="w-32 h-1 bg-brand-navy rounded-full opacity-20"></div>
+          <div className="w-32 h-1.5 bg-brand-navy rounded-full opacity-10"></div>
         </div>
       </div>
     );
